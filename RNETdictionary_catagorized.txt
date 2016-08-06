@@ -1,0 +1,95 @@
+#R-net known frames 2.0 (in cansend format) 7.30.2016
+#produced by rnet_specter@protonmail.com and redragonx@msu.edu
+
+STARTUP and NETWORK CONFIG frames:
+		     000#R               :PMtx sleep all devices
+		     002#R               :PMtx sleep all devices
+		     00C#                :JSMtx test canbus connection.  Checks for ack on bus prior to JSM wake and after "power" is pressed.
+		     04M#00000000        :JSMrx select modemap M for parameter exchange.  See: 78M#...  causes JSMerr if not at modemap evel
+		     04M#80000000        :JSMtx end parameter exchange for mode M.
+		     7B3#                :PMtx global request for configuration mode
+		     7B1#                :PMtx drop to config mode 1
+		     7B0#                :JSMtx PMtx drop to config mode 0 --- ends capability mapping, start "run" mode     
+	PARAMETER EXCHANGE frames:
+		     78M#2P810000Xx00Vv00:JSMtx check if pointer Xx sub Vv exists
+		     79M#4P81000000000000:PMtx yes, pointer exists
+		     79M#CP81000000000000:PMtx no, pointer does not exist
+		     79M#2P8C0000asciitxt:PMtx text chunk used for cJSM display messages.  Only present with programmer.
+		     78M#4P8F000000000000:JSMtx request "pointer" from PM.  Pointer address set with 78M#2P81...
+		     79M#2P8F0000XxYy0000:JSMtx XxYy = "pointer" returned by PM. Response to 78M#408F000000000000 
+		     79M#C181000028000000:PMtx Error: address not found.
+		     78M#208000001M000000:JSMtx programming header issued prior to capability ("pointer") exchange
+
+SERIAL NUMBER enumeration/confirmation:
+			1FRSTtUu#                :JSMtx/rx PMtx/rx SerialNumber exchange. R=Subsequence {0-7} S=Sequence{0-7} Tt=address(?) repeats for each Subsequence.  Even sequences are from PM, odd are from ECUs.
+			1f9000Xx#			
+			1f9100Xx#
+			1f8000Xx#
+			1fb0000Z#RrSsTtUuVvWwXxYy:Set serial number for device Z
+
+
+EVENT FRAMES:
+	JSM:
+		0A040X00#Pp              :JSMtxrx PMrx Motor speed max.  0x00-0x64 typically in 0x19(25) increments
+		0C000205#                :JSMtx(?) ui interaction for module 2
+		0C000205#
+		0C000301#                :JSMtx(?) ui interaction for module 3
+		0C000303#		
+		0C000401#                :ILMrx JSMtx D=assigned device number(adn typically 4).  start left turn signal lamp
+		0C000402#                :ILMrx JSMtx D=assigned device number.  start right turn signal lamp
+		0C000403#                :ILMrx JSMtx D=assigned device number.  start hazard lamps
+		0C000E00#XyYy            :ILMtx JSMrx E=adn+1. XyYy = bitmap of set lamp indicators on JSM. Xx=mask Yy=bitmap of 4 indicators. 01=left,04=right,80=flood,10=hazard
+		0C040X00#                :JSMrx/tx Global + X=origin adn. Horn start.
+		0C040X01#                :JSMrx/tx Global + X=origin adn. Horn stop.  Horn can get stuck. Sound until stop.
+		181C0D00#LlNnLlNnLlNnLlNn:JSMrx PMtx play four musical tones. Ll=length Nn=Scale/Note. Note >0x0b plays as 0x0b. Ll=00 Nn=00 for note
+		1C200X00#RrSsTtUuVv      :JSMrx X=device (don't care).  0x0481000003 triggers jsm error display... but JoyXY continues
+		1C240X01#                :JSMtx X=device. Device is ready. UI is active.
+
+	PM:
+		     06X#90010000	 :PMtx chairAngle motor has stopped
+		     06X#90010040	 :PMtx chairAngle motor is running
+		0C280000#Xx              :PMtx pm connected.  sent once after serialnum exchange.
+		0C000005#                :PMtx global motor has stopped (0 MPH).
+		0C000006#                :PMtx global motor is decelerating.
+
+
+
+MODE / PROFILE frames:
+		051#004M0000		:JSMtx select profile M
+		050#Ss0M00XX	        :JSMrx appears to be in same format as 060#Ss...
+		061#404M0000		:JSMtx suspend mode M
+		061#004M0000	        :JSMtx select mode M. Last mode must be suspended to change mode
+		060#Ss0M00XX	        :JSMrx return attribute Ss of mode M as data XX
+		0C180000#0101		:PMtx enable motor output(?) seen after change to drive mode
+		0C180000#020X		:PMtx enable motor output(?) seen after change to chair angle mode
+
+
+PERIODIC frames:
+		00E#RrSsTtUuVvWwXxYy:JSMtx unique identifier for interface.  Periodic: 50ms. May map to AXYYMM1234 ie serial number. known old jsm = 08901c8a
+		02000M00#XxYy            :JSMtx M=device. Joystick position -100 to 100 for each axxis as sint_8. Periodic: 10ms
+		03c30F0F#8787878787878787:JSMtx device heartbeat.  Periodic: 100ms
+		0C000404#                :ILMrx JSMtx D=assigned device number.  start flood lamps. Periodic: ~1000ms
+		0C140X00#Xx              :PMtx heartbeart.  Periodic: 1000ms.  1ms between. Alternates between two values (seen: 0xC0,0x01)
+		0C140400#82              :(?)  Periodic: 1000ms.  Lamp controller(?)
+		0C180200: Periodic (?)
+		0C180400:0X0Y            :(?) X={2}  Y={1,2} alternating. Periodic: ~125ms varies
+		14300X00#LlHh            :PMtx drive motor current. Little-endian 16-bit. Instantaneous. Periodic: 200ms  Units of measurement(?) 2e8 = 1.6
+		1C0C0X00#Xx              :PMtx Global.  X=device.  JSMrx battery power level in % Xx = 0x00 - 0x64. Periodic: 1000ms 
+		1C300X04#LlLlLlLlRrRrRrRr:PMtx distance counter. Periodic: 1000ms
+		1C2C0X00#RrSsTtUuVvWw    :RrSsTtUuVvWw = Time of Day little-endian.
+
+
+#-----------------------------------------------------------------------------------------------------------------
+UNKNOWN function (You can help with this.  Ask for wireshark pcap files and we can help you get started. ~specter):
+		0A400D0M#XY		 :(?) X={1,2,3,0xB} Y={0,1,2,3}
+		0C000X00#                :JSMrx causes JSM network error.  All joystick 02000D00
+		0C040D0X#     CHECK! CONFLICT!           :Periodic: ~500ms varies
+		0C180001#x00y0z          :PMtx(?) x={2,0}  y=1  z=1 set chair adjust mode or motor output(?)
+		0C180100#XxYy            :Xx=04  Yy={2,1} ~50ms apart in a cluster of 2
+		0C180101#020201
+		0C180101#030201
+		0C180201#210001
+		0C180200:0X0Y            :(?) x,y={0,1}
+		0C180401:
+		140C0X01:
+
