@@ -1,5 +1,5 @@
 #R-net known frames 2.0 (in cansend format) 7.30.2016
-#produced by rnet_specter@protonmail.com and redragonx@msu.edu
+#produced by rnet_specter@protonmail.com and stephen@dicesoft.net
 
 STARTUP and NETWORK CONFIG frames:
 		     000#R               :PMtx sleep all devices
