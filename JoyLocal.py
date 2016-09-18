@@ -228,7 +228,7 @@ def inject_rnet_joystick_frame(can_socket, rnet_joystick_id):
 
             new_rnet_joystick_frame = rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2)
             if cf == rnet_joystick_frame_raw:
-                cansend(s, new_rnet_joystick_frame)
+                cansend(can_socket, new_rnet_joystick_frame)
 			
 
 
