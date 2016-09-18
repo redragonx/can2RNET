@@ -292,7 +292,7 @@ if __name__ == "__main__":
         joystick_y = 0
 
         if usb_joystick_dev != '':
-            print('Using USB joystick @ ' + str(jsdev).split("'")[1])
+            print('Using USB joystick @ ' + str(usb_joystick_dev).split("'")[1])
             usb_joystick_read_thread = threading.Thread(
                     target=x360.usb_joystick_read_thread,
                     args=(usb_joystick_dev,),
