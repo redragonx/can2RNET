@@ -1,4 +1,3 @@
-#JoyLocal.py - Translate USB joystick x/y axis to Rnet and inject onto canbus
 #Requires: socketCan, can0 interface
 #!/python3
 # joystick based on: https://www.kernel.org/doc/Documentation/input/joystick-api.txt
@@ -12,6 +11,7 @@ from can2RNET import *
 debug = True
 
 
+#JoyLocal.py - Translate USB joystick x/y axis to Rnet and inject onto canbus
 class X360:
 
     axis_map = []
@@ -19,8 +19,8 @@ class X360:
     xthreshold = 8 * 0x10000 / 128
     ythreshold = 8 * 0x10000 / 128
 
-    joyx = 0
-    joyy = 0
+    joystick_x = 0
+    joystick_y = 0
 
 
     # We'll store the states here.
@@ -119,7 +119,7 @@ class X360:
             print ('No joystick at ' + fn)
             return ('')
 
-       
+
         #jsdev = os.open(fn, 'rb', os.O_RDONLY|os.O_NONBLOCK)
 
         # Get the device name.
@@ -164,33 +164,35 @@ class X360:
         return (jsdev)
 
 
-    def joyread_thread(self, jsdev):
-        global joyx
-        global joyy
+    def usb_joystick_read_thread(self, jsdev):
+        global joystick_x
+        global joystick_y
         global rnet_threads_running
+
         while rnet_threads_running:
             try:
                 evbuf = jsdev.read(8)
                 jtime, jvalue, jtype, jnumber = struct.unpack('IhBB', evbuf)
+
                 if jtype & 0x02:
                     axis = self.axis_map[jnumber]
                     if (axis == 'x'):
                             if abs(jvalue) > self.xthreshold:
-                                    joyx = 0x100 + int(jvalue * 100 / 128) >> 8 &0xFF
+                                    joystick_x = 0x100 + int(jvalue * 100 / 128) >> 8 &0xFF
                             else:
-                                    joyx = 0
+                                    joystick_x = 0
                     elif (axis == 'y'):
                             if abs(jvalue) > self.ythreshold:
-                                    joyy = 0x100 - int(jvalue * 100 / 128) >> 8 &0xFF
+                                    joystick_y = 0x100 - int(jvalue * 100 / 128) >> 8 &0xFF
                             else:
-                                    joyy = 0
+                                    joystick_y = 0
 
             except:
-                print("Error reading joystick")
-                joyx = 0
-                joyy = 0
-                rnet_threads_running=False
-                                                           
+                print("Error reading USB: joystick")
+                joystick_x = 0
+                joystick_y = 0
+                rnet_threads_running = False
+
 def dec2hex(dec,hexlen):  #convert dec to hex with leading 0s and no '0x' 
     h=hex(int(dec))[2:]
     l=len(h)
@@ -199,16 +201,16 @@ def dec2hex(dec,hexlen):  #convert dec to hex with leading 0s and no '0x'
     if h[l-2]=="x":
         h= '0'+hex(int(dec))[1:]
     return ('0'*hexlen+h)[l:l+hexlen]
-                            
+
 #THREAD: sends RnetJoyFrame every mintime seconds
 #Not used
 def send_joystick_canframe(s,joy_id):
         mintime = .01
         nexttime = time() + mintime
-        priorjoyx=joyx
-        priorjoyy=joyy
+        priorjoystick_x=joystick_x
+        priorjoystick_y=joystick_y
         while rnet_threads_running:
-                joyframe = joy_id+'#'+dec2hex(joyx,2)+dec2hex(joyy,2)
+                joyframe = joy_id+'#'+dec2hex(joystick_x,2)+dec2hex(joystick_y,2)
                 cansend(s,joyframe)
                 nexttime += mintime
                 t= time()
@@ -218,25 +220,30 @@ def send_joystick_canframe(s,joy_id):
                     nexttime += mintime
 
 #THREAD: Waits for joyframe and injects another spoofed frame ASAP
-def inject_joy_frame(s,joy_id):
-	joyframeraw = build_frame(joy_id+"#0000") #prebuild the frame we are waiting on
+def inject_rnet_joystick_frame(can_socket, rnet_joystick_id):
+	rnet_joystick_frame_raw = build_frame(rnet_joystick_id + "#0000") #prebuild the frame we are waiting on
+
 	while rnet_threads_running:
-		cf, addr = cansocket.recvfrom(16)
-		if cf == joyframeraw:
-			cansend(s,joy_id+'#'+dec2hex(joyx,2)+dec2hex(joyy,2))
+
+		cf, addr = can_socket.recvfrom(16)
+
+                new_rnet_joystick_frame = rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y,2))
+		if cf == rnet_joystick_frame_raw:
+			cansend(s, new_rnet_joystick_frame)
 			
 
 
 
 #Waits for any frame containing a Joystick position
 #Returns: JoyFrame extendedID as text
-def wait_joystick_frame(cansocket,t):
+def wait_rnet_joystick_frame(can_socket, start_time):
     frameid = ''
+
     while frameid[0:3] != '020':  #just look for joystick frame ID (no extended frame)
-        cf, addr = cansocket.recvfrom(16) #this is a blocking read.... so if there is no canbus traffic it will sit forever (to fix!)
+        cf, addr = can_socket.recvfrom(16) #this is a blocking read.... so if there is no canbus traffic it will sit forever (to fix!)
         candump_frame = dissect_frame(cf)
         frameid = candump_frame.split('#')[0]
-        if time()>t:
+        if time() > start_time:
              print("JoyFrame wait timed out ")
              return('Err!')
     return(frameid)
@@ -250,7 +257,7 @@ def RNETsetSpeedRange(cansocket,speed_range):
 
 def RNETshortBeep(cansocket):
         cansend(cansocket,"181c0100#0260000000000000")
-        
+
 #Play little song
 def RNETplaysong(cansocket):
         cansend(cansocket,"181C0100#2056080010560858")
@@ -261,54 +268,68 @@ def RNETplaysong(cansocket):
 def watch_and_wait():
         while threading.active_count() > 0:
             sleep(0.5)
-            print('X: '+dec2hex(joyx,2)+'\tY: '+dec2hex(joyy,2)+ '\tThreads: '+str(threading.active_count()))
-            
+
+            print('X: '+dec2hex(joystick_x,2)+'\tY: '+dec2hex(joystick_y,2)+ '\tThreads: '+str(threading.active_count()))
+
 #does not use a thread queue.  Instead just sets a global flag.
 def kill_rnet_threads():
     global rnet_threads_running
-    rnet_threads_running = False        
+    rnet_threads_running = False
 
 
 
 if __name__ == "__main__":
         global rnet_threads_running
-        rnet_threads_running = True        
-        cansocket = opencansocket(0)
-                   
-        #init /dev joystick
+        global joystick_x
+        global joystick_y
+
+        rnet_threads_running = True
+        can_socket = opencansocket(0)
+
+        #init usb joystick
         x360 = X360()
-        jsdev = x360.init_joystick()
-        global joyx
-        global joyy
-        joyx = 0
-        joyy = 0
-        if jsdev != '':
-            print('using USB Joystick @ ' + str(jsdev).split("'")[1])
-            joyreadthread = threading.Thread(target=x360.joyread_thread,args=(jsdev,),daemon=True)
-            joyreadthread.start()
-            t=time()+.20
-            print('waiting for RNET-Joystick frame')
-            joy_id = wait_joystick_frame(cansocket,t) #t=timeout time
-            if joy_id == 'Err!':
+        usb_joystick_dev = x360.init_joystick()
+        joystick_x = 0
+        joystick_y = 0
+
+        if usb_joystick_dev != '':
+            print('Using USB joystick @ ' + str(jsdev).split("'")[1])
+            usb_joystick_read_thread = threading.Thread(
+                    target=x360.usb_joystick_read_thread,
+                    args=(usb_joystick_dev,),
+                    daemon=True)
+            usb_joystick_read_thread.start()
+
+            start_time = time() + .20
+            print('Waiting for RNET-Joystick frame')
+            rnet_joystick_id = wait_rnet_joystick_frame(can_socket, start_time) #t=timeout time
+
+            if rnet_joystick_id == 'Err!':
                 print('No RNET-Joystick frame seen within minimum time')
                 sys.exit()
-            print('Found RNET-Joystick frame: '+joy_id)
+
+            print('Found RNET-Joystick frame: ' + rnet_joystick_id)
             #joy_id = RNET_JSMerror_exploit(cansocket)
-            speed_range = 00
-            RNETsetSpeedRange(cansocket,speed_range)
+
+            # set chair's speed to the lowest setting.
+            chair_speed_range = 00
+            RNETsetSpeedRange(can_socket, chair_speed_range)
             #sendjoyframethread = threading.Thread(target=send_joystick_canframe,args=(cansocket,joy_id,),daemon=True)
             #sendjoyframethread.start()
-            injectjoyframethread = threading.Thread(target=inject_joy_frame,args=(cansocket,joy_id,),daemon=True)
-            injectjoyframethread.start()
+
+            inject_rnet_joystick_frame_thread = threading.Thread(
+                    target=inject_joy_frame,
+                    args=(can_socket, rnet_joystick_id,),
+                    daemon=True)
+            inject_rnet_joystick_frame_thread.start()
             sleep(0.5)
+
+
             watch_and_wait()
-            kill_rnet_threads()            
+            kill_rnet_threads()
         else:
             print('No Joystick found.')
             kill_rnet_threads()
 
-        
+                                                           
         print("Exiting")
-        
-        
-                
