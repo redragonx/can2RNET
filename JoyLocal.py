@@ -224,12 +224,11 @@ def inject_rnet_joystick_frame(can_socket, rnet_joystick_id):
 	rnet_joystick_frame_raw = build_frame(rnet_joystick_id + "#0000") #prebuild the frame we are waiting on
 
 	while rnet_threads_running:
+            cf, addr = can_socket.recvfrom(16)
 
-		cf, addr = can_socket.recvfrom(16)
-
-                new_rnet_joystick_frame = rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2))
-		if cf == rnet_joystick_frame_raw:
-			cansend(s, new_rnet_joystick_frame)
+            new_rnet_joystick_frame = rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2))
+            if cf == rnet_joystick_frame_raw:
+                cansend(s, new_rnet_joystick_frame)
 			
 
 
