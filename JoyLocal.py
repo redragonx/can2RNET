@@ -317,7 +317,7 @@ if __name__ == "__main__":
             #sendjoyframethread.start()
 
             inject_rnet_joystick_frame_thread = threading.Thread(
-                    target=inject_joy_frame,
+                    target=inject_rnet_joystick_frame,
                     args=(can_socket, rnet_joystick_id,),
                     daemon=True)
             inject_rnet_joystick_frame_thread.start()
