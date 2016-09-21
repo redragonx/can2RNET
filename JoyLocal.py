@@ -225,10 +225,8 @@ def inject_rnet_joystick_frame(can_socket, rnet_joystick_id):
 
 	while rnet_threads_running:
             cf, addr = can_socket.recvfrom(16)
-
-            new_rnet_joystick_frame = rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2)
-            if cf == rnet_joystick_frame_raw:
-                cansend(can_socket, new_rnet_joystick_frame)
+           if cf == rnet_joystick_frame_raw:
+                cansend(can_socket, rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2))
 			
 
 
@@ -308,14 +306,10 @@ if __name__ == "__main__":
                 sys.exit()
 
             print('Found RNET-Joystick frame: ' + rnet_joystick_id)
-            #joy_id = RNET_JSMerror_exploit(cansocket)
-
+            
             # set chair's speed to the lowest setting.
             chair_speed_range = 00
             RNETsetSpeedRange(can_socket, chair_speed_range)
-            #sendjoyframethread = threading.Thread(target=send_joystick_canframe,args=(cansocket,joy_id,),daemon=True)
-            #sendjoyframethread.start()
-
             inject_rnet_joystick_frame_thread = threading.Thread(
                     target=inject_rnet_joystick_frame,
                     args=(can_socket, rnet_joystick_id,),
