@@ -26,6 +26,7 @@ def build_frame(canstr):
     if not '#' in canstr:
         print('build_frame: missing #')
         return 'Err!'
+
     cansplit=canstr.split('#')
     lcanid=len(cansplit[0])
     RTR='#R' in canstr
@@ -49,7 +50,6 @@ def build_frame(canstr):
         return 'Err!'
     return canid+struct.pack("B",can_dlc&0xF)+b'\x00\x00\x00'+candat
 
-    
 
 def dissect_frame(frame):
     # CAN frame packing/unpacking (see `struct can_frame` in <linux/can.h>)
@@ -65,7 +65,6 @@ def dissect_frame(frame):
         rtr = False
     can_idtxt = '{:08x}'.format(can_id & 0x1FFFFFFF)[-idl:]
     return (can_idtxt + '#'+''.join(["%02X" % x for x in data[:can_dlc]]) + 'R'*rtr)
-    
 
 def cansend(s,cansendtxt):
     try:
@@ -77,7 +76,7 @@ def cansend(s,cansendtxt):
 
 def canrepeat_stop(thread):
     thread._stop = True
-    
+
 def canrepeatThread(s,cansendtxt,interval):
     interval /= 1000
     nexttime = time() + interval
@@ -88,7 +87,7 @@ def canrepeatThread(s,cansendtxt,interval):
         if (nexttime > time()):
             sleep(nexttime - time())
     print(str(threading.currentThread())+' stopped')
-    
+
 def canrepeat(s,cansendtxt,interval): #interval in ms
     t = threading.Thread(target=canrepeatThread,args=(s,cansendtxt,interval),daemon=True)
     t._stop = False #threading.Event()
@@ -133,5 +132,3 @@ def opencansocket(busnum):
             print ('Failed to open vcan'+busnum+' socket')
             cansocket = ''
     return cansocket
-
-
