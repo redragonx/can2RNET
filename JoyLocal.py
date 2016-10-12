@@ -188,7 +188,7 @@ class X360:
                                     joystick_y = 0
 
             except:
-                print("Error reading USB: joystick")
+                print("Error reading USB joystick")
                 joystick_x = 0
                 joystick_y = 0
                 rnet_threads_running = False
@@ -222,14 +222,11 @@ def send_joystick_canframe(s,joy_id):
 #THREAD: Waits for joyframe and injects another spoofed frame ASAP
 def inject_rnet_joystick_frame(can_socket, rnet_joystick_id):
 	rnet_joystick_frame_raw = build_frame(rnet_joystick_id + "#0000") #prebuild the frame we are waiting on
-
 	while rnet_threads_running:
-            cf, addr = can_socket.recvfrom(16)
-           if cf == rnet_joystick_frame_raw:
-                cansend(can_socket, rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2))
+		cf, addr = can_socket.recvfrom(16)
+		if cf == rnet_joystick_frame_raw:
+			cansend(can_socket, rnet_joystick_id + '#' + dec2hex(joystick_x, 2) + dec2hex(joystick_y, 2))
 			
-
-
 
 #Waits for any frame containing a Joystick position
 #Returns: JoyFrame extendedID as text
@@ -263,10 +260,10 @@ def RNETplaysong(cansocket):
 
 #do very little and output something as sign-of-life
 def watch_and_wait():
-        while threading.active_count() > 0:
-            sleep(0.5)
-
-            print('X: '+dec2hex(joystick_x,2)+'\tY: '+dec2hex(joystick_y,2)+ '\tThreads: '+str(threading.active_count()))
+        started_time = time()
+        while threading.active_count() > 0 and rnet_threads_running:
+             sleep(0.5)
+             print(str(round(time()-started_time,2))+'\tX: '+dec2hex(joystick_x,2)+'\tY: '+dec2hex(joystick_y,2)+ '\tThreads: '+str(threading.active_count()))
 
 #does not use a thread queue.  Instead just sets a global flag.
 def kill_rnet_threads():
@@ -279,9 +276,8 @@ if __name__ == "__main__":
         global rnet_threads_running
         global joystick_x
         global joystick_y
-
         rnet_threads_running = True
-        can_socket = opencansocket(0)
+        can_socket = opencansocket(1)
 
         #init usb joystick
         x360 = X360()
