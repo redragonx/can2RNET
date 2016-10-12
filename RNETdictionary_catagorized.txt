@@ -1,5 +1,5 @@
-#R-net known frames 2.0 (in cansend format) 9.14.2016
-#produced by rnet_specter@protonmail.com and redragonx@msu.edu
+#R-net known frames 2.0 (in cansend format) 10.11.2016
+#produced by rnet_specter@protonmail.com and stephen@dicesoft.net
 #All frames below are in 
 
 
