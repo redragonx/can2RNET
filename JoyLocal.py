@@ -277,7 +277,7 @@ if __name__ == "__main__":
         global joystick_x
         global joystick_y
         rnet_threads_running = True
-        can_socket = opencansocket(1)
+        can_socket = opencansocket(0)
 
         #init usb joystick
         x360 = X360()
