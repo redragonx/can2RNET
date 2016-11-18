@@ -16,19 +16,38 @@ Raspberry PI setup
 To install PiCan2 on pi3, add to /boot/config.txt:
 ```
 dtparam=spi=on 
-dtoverlay=mcp2515-can0-overlay,oscillator=16000000,interrupt=25 		
+
+dtoverlay=mcp2515-can0-overlay,oscillator=16000000,interrupt=25         
 dtoverlay=spi-bcm2835-overlay
 ```
 
-SocketCAN setup and examples
+SocketCAN setup
 ================================== 
 
+Add the following lines under file /etc/network/interfaces
 ```
-$ sudo ip link set can0 up type can bitrate 125000
+allow-hotplug can0
+iface can0 can static
+        bitrate 125000
+        up /sbin/ip link set $IFACE down
+        up /sbin/ip link set $IFACE up
+```
+Add these kernel modules under /etc/modules
+```
+mcp251x
+can_dev
+```
+Reboot the pi! Then you should see an can0 interface listed under the command `ifconfig`
 
+Install CAN-UTILS
+=================================
+```
 $ git clone https://github.com/linux-can/can-utils
 or sudo apt-get install can-utils
-
+```
+R-Net command examples from the terminal
+=========================================
+```
 $ candump can0 -L   # -L puts in log format
 (1469933235.191687) can0 00C#
 (1469933235.212450) can0 00E#08901C8A00000000
@@ -41,3 +60,7 @@ $ cangen can0 -e -g 10  -v -v     #fuzz buss with random extended frames+data
 
 $ candump -n 1 can0,7b3:7ff     #wait for can id 7B3
 ```
+
+Or run `python3 JoyLocal.py` to control a R-Net based PWC using any usb gamepad connected to the pi3.
+
+Python 3 is required.
