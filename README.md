@@ -21,8 +21,8 @@ To install PiCan2 on pi3, add to /boot/config.txt:
 ```
 dtparam=spi=on 
 
-dtoverlay=mcp2515-can0-overlay,oscillator=16000000,interrupt=25         
-dtoverlay=spi-bcm2835-overlay
+dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25         
+dtoverlay=spi-bcm2835
 ```
 
 SocketCAN setup
