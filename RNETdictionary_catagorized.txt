@@ -1,31 +1,38 @@
-#R-net known frames 2.0 (in cansend format) 7.30.2016
+#R-net known frames 2.0 (in cansend format) 10.11.2016
 #produced by rnet_specter@protonmail.com and stephen@dicesoft.net
+#All frames below are in 
+
 
 STARTUP and NETWORK CONFIG frames:
-		     000#R               :PMtx sleep all devices
-		     002#R               :PMtx sleep all devices
-		     00C#                :JSMtx test canbus connection.  Checks for ack on bus prior to JSM wake and after "power" is pressed.
-		     04M#00000000        :JSMrx select modemap M for parameter exchange.  See: 78M#...  causes JSMerr if not at modemap evel
-		     04M#80000000        :JSMtx end parameter exchange for mode M.
-		     7B3#                :PMtx global request for configuration mode
-		     7B1#                :PMtx drop to config mode 1
-		     7B0#                :JSMtx PMtx drop to config mode 0 --- ends capability mapping, start "run" mode     
+		000#R			:PMtx sleep all devices
+		000#			:JSMtx sleeping
+		002#R			:PMtx sleep all devices
+		004#			:JSMtx sleep commencing
+		
+
+		00C#			:JSMtx test canbus connection.  Checks for ack on bus prior to JSM wake and after "power" is pressed.
+		04M#00000000		:JSMrx select modemap M for parameter exchange.  See: 78M#...  causes JSMerr if not at modemap evel
+		04M#80000000		:JSMtx end parameter exchange for mode M.
+		7B3#			:JSMtx request serial# exchange
+		7B3#R			:PMtx commencing serial# exchange
+		7B1#			:PMtx drop to config mode 1
+		7B0#			:JSMtx PMtx drop to config mode 0 --- ends capability mapping, start "run" mode     
 	PARAMETER EXCHANGE frames:
-		     78M#2P810000Xx00Vv00:JSMtx check if pointer Xx sub Vv exists
-		     79M#4P81000000000000:PMtx yes, pointer exists
-		     79M#CP81000000000000:PMtx no, pointer does not exist
-		     79M#2P8C0000asciitxt:PMtx text chunk used for cJSM display messages.  Only present with programmer.
-		     78M#4P8F000000000000:JSMtx request "pointer" from PM.  Pointer address set with 78M#2P81...
-		     79M#2P8F0000XxYy0000:JSMtx XxYy = "pointer" returned by PM. Response to 78M#408F000000000000 
-		     79M#C181000028000000:PMtx Error: address not found.
-		     78M#208000001M000000:JSMtx programming header issued prior to capability ("pointer") exchange
+		78M#2P810000Xx00Vv00:JSMtx check if pointer Xx sub Vv exists
+		79M#4P81000000000000:PMtx yes, pointer exists
+		79M#CP81000000000000:PMtx no, pointer does not exist
+		79M#2P8C0000asciitxt:PMtx text chunk used for cJSM display messages.  Only present with programmer.
+		78M#4P8F000000000000:JSMtx request "pointer" from PM.  Pointer address set with 78M#2P81...
+		79M#2P8F0000XxYy0000:JSMtx XxYy = "pointer" returned by PM. Response to 78M#408F000000000000 
+		79M#C181000028000000:PMtx Error: address not found.
+		78M#208000001M000000:JSMtx programming header issued prior to capability ("pointer") exchange
 
 SERIAL NUMBER enumeration/confirmation:
-			1FRSTtUu#                :JSMtx/rx PMtx/rx SerialNumber exchange. R=Subsequence {0-7} S=Sequence{0-7} Tt=address(?) repeats for each Subsequence.  Even sequences are from PM, odd are from ECUs.
-			1f9000Xx#			
-			1f9100Xx#
-			1f8000Xx#
-			1fb0000Z#RrSsTtUuVvWwXxYy:Set serial number for device Z
+		1FMSKkUu#                :ALLtx SerialNumber exchange. M=module# (1st come,1st serve) {0-7} S=serial position{0-7} Kk=key Uu=serial data
+		1f9000Xx#			
+		1f9100Xx#
+		1f8000Xx#
+		1fb0000Z#RrSsTtUuVvWwXxYy:Set serial number for device Z
 
 
 EVENT FRAMES:
@@ -46,11 +53,11 @@ EVENT FRAMES:
 		1C240X01#                :JSMtx X=device. Device is ready. UI is active.
 
 	PM:
-		     06X#90010000	 :PMtx chairAngle motor has stopped
-		     06X#90010040	 :PMtx chairAngle motor is running
-		0C280000#Xx              :PMtx pm connected.  sent once after serialnum exchange.
-		0C000005#                :PMtx global motor has stopped (0 MPH).
-		0C000006#                :PMtx global motor is decelerating.
+		06X#90010000	 	:PMtx chairAngle motor has stopped
+		06X#90010040	 	:PMtx chairAngle motor is running
+		0C280000#Xx		:PMtx pm connected.  sent once after serialnum exchange.
+		0C000005#		:PMtx global motor has stopped (0 MPH).
+		0C000006#		:PMtx global motor is decelerating.
 
 
 
