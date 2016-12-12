@@ -1,6 +1,22 @@
-#Requires: socketCan, can0 interface
 #!/python3
 # joystick based on: https://www.kernel.org/doc/Documentation/input/joystick-api.txt
+
+#Requires: socketCan, can0 interface
+
+# This file is part of can2RNET.
+# 
+# can2RNET is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# can2RNET is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 import socket, sys, os, array, threading
 from time import *
