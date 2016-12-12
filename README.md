@@ -4,6 +4,10 @@ R-Net CAN library for power-wheelchairs with R-Net electronics
 
 By Stephen Chavez & Specter
 
+Projects that use this
+======================
+- [Smart Wheels](https://github.com/ysshah/SmartWheels)
+   - https://www.youtube.com/watch?v=VejDcxrd6uk
 
 Raspberry PI setup
 =====================
