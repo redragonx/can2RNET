@@ -14,7 +14,7 @@ Raspberry PI setup
 =====================
 
 - Raspberry Pi 3 (Model B)
-- PiCan2 Pi hat board
+- PiCan2 Pi hat board http://copperhilltech.com/pican-2-can-interface-for-raspberry-pi/
 - R-Net cable
 - Blank 2GB SD Card
 
