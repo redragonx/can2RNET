@@ -1,4 +1,4 @@
-R-Net CAN library for power-wheelchairs with R-Net electronics
+PGDT R-Net CAN library for power-wheelchairs with R-Net electronics
 ================================================
 
 By Stephen Chavez & Specter
