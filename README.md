@@ -1,4 +1,3 @@
-================================================
 R-Net CAN library for power-wheelchairs with R-Net electronics
 ================================================
 
