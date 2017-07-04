@@ -142,7 +142,7 @@ PLEASE be careful!
 =================================
 If all is working correctly the "remote" machine should now be controlling various aspects of the wheelchair.  We've mapped X-Y to the left stick on the USB controller.  Additionally, buttons map to MAXSPEED, HORN, and HEADLIGHTS/FLASHERS.
 
-Seriously, both of were injured and humbled during the creation of this code.  We've tried to make it fail-safe.  You are a beta-tester.  BEWARE.  What can go wrong WILL go wrong.  So stay clear of cliffs, canals, piers, monster-trucks, puppies, or anything else that can injure you or that you might injure due to some kind of bug we did not anticipate.
+Seriously... both of us were injured and humbled during the creation of this code.  We've tried to make it fail-safe.  You are a beta-tester.  BEWARE.  What can go wrong WILL go wrong.  So stay clear of cliffs, canals, china-shops, monster-trucks, puppies, or anything else that can injure you or that you might injure due to some kind of bug we did not anticipate.
 
 We've waited over a year to release this code publicly.  If you have gotten this far in trying to get this to work then you must be prepared to assume the risk of something going wrong.
 
