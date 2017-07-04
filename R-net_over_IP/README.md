@@ -1,4 +1,4 @@
-PGDT R-Net CAN library for power-wheelchairs with R-Net electronics
+﻿PGDT R-Net CAN library for power-wheelchairs with R-Net electronics
 ================================================
 
 By Stephen Chavez & Specter
@@ -13,12 +13,12 @@ Hardware required:
 - Raspberry Pi 3 (Model B)
 
 - PiCan2 w/ SMPS board made by SkPang (great board SkPang!)
-	http://copperhilltech.com/pican-2-can-interface-for-raspberry-pi/
-	http://skpang.co.uk/catalog/pican2-canbus-board-for-raspberry-pi-23-with-smps-p-1476.html
+	- http://copperhilltech.com/pican-2-can-interface-for-raspberry-pi/
+	- http://skpang.co.uk/catalog/pican2-canbus-board-for-raspberry-pi-23-with-smps-p-1476.html
 
 - R-Net cable
-	cable will need to be cut to reveal the four conductors inside
-	you only need enough cable to connect Pi3 to whichever R-net port you wish to use
+	- cable will need to be cut to reveal the four conductors inside
+	- you only need enough cable to connect Pi3 to whichever R-net port you wish to use
 
 - WiFi router - secured with WPA2 or better
 
@@ -35,7 +35,7 @@ Raspberry PI setup
 2. Attach PiCan2 Board to Pi3.
 
 3. Boot Pi, and after selecting the correct keyboard in raspi-config ;-)
-	Enable ssh.
+	- Enable ssh.
 
 4. To install PiCan2 on pi3, add to /boot/config.txt:
 ```
@@ -54,15 +54,17 @@ iface can0 can static
         up /sbin/ip link set $IFACE down
         up /sbin/ip link set $IFACE up
 ```
-Add these kernel modules under /etc/modules
+6. Add these kernel modules under /etc/modules
 ```
 mcp251x
 can_dev
 ```
 Reboot the pi! 
 
-Once your are back to the terminal: ifconfig
-
+Once your are back to the terminal: 
+```
+ifconfig
+```
 You should see a can0 interface listed.
 
 If not, you won't be able to proceed.
@@ -81,16 +83,18 @@ $ git clone https://github.com/redragonx/can2RNET
 ```
 
 
-Attach R-net cable to socket can
+Attach R-net cable to PiCan2 board
 =================================
 Split and strip the R-net cable to the length you want.
 Tin the ends of the four wires inside the cable.
-Note: the two power wires (BLK and RED) are a bit too large to fit into the tiny screw terminals on the PiCan2 board.  I used a grinding wheel to narrow them down by sanding the tinned wires to about half their original size.  There are many other ways to accomplish the same thing: fileing, scraping, or eliminate copper strands prior to tinning.
+Note: the two power wires (BLK and RED) are a bit too large to fit into the tiny screw terminals on the PiCan2 board.  I used a grinding wheel to narrow them down by sanding the tinned wires to about half their original size.  There are many other ways to accomplish the same thing: filing, scraping, or eliminate copper strands prior to tinning.
 Screw the R-net wires into the terminal strip on the PiCan2 board.
+```
 	RED -> +12V
 	BLK -> GND
 	BLU -> CAN_L
 	WHT -> CAN_H
+```
 
 Configure Pi3 to connect to router
 =================================
@@ -120,11 +124,11 @@ Chair's JSM should play a little tune indicating the exploit was successful.
 
 Plug in USB controller
 =================================
-check devices to ensure the controller appears to linux in a way our code expects it to.
+check devices to ensure the controller appears to Linux in a way our code expects it to.
 ```
 ls /dev/input/js*
 ```
-controllers often follow a de-facto standard that linux can easily process... except when they don't.
+controllers often follow a de-facto standard that Linux can easily process... except when they don't.
 
 Open connection between JoyServer and JoyClient
 =================================
@@ -138,7 +142,7 @@ PLEASE be careful!
 =================================
 If all is working correctly the "remote" machine should now be controlling various aspects of the wheelchair.  We've mapped X-Y to the left stick on the USB controller.  Additionally, buttons map to MAXSPEED, HORN, and HEADLIGHTS/FLASHERS.
 
-Seriously, both of were injured and humbled during the creation of this code.  We've tried to make it failsafe.  You are a beta-tester.  BEWARE.  What can go wrong WILL go wrong.  So stay clear of cliffs, canals, piers, monster-trucks, puppies, or anything else that can injure you or that you might injure due to some kind of bug we did not anticipate.
+Seriously, both of were injured and humbled during the creation of this code.  We've tried to make it fail-safe.  You are a beta-tester.  BEWARE.  What can go wrong WILL go wrong.  So stay clear of cliffs, canals, piers, monster-trucks, puppies, or anything else that can injure you or that you might injure due to some kind of bug we did not anticipate.
 
 We've waited over a year to release this code publicly.  If you have gotten this far in trying to get this to work then you must be prepared to assume the risk of something going wrong.
 
