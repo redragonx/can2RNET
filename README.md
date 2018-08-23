@@ -25,6 +25,15 @@ dtoverlay=mcp2515-can0,oscillator=16000000,interrupt=25
 dtoverlay=spi-bcm2835
 ```
 
+R-Net Wiring Pinout to CAN inferface
+==================================
+1. Strip a R-Net wire in half.
+2. Connect the wire with this pinout:
+```
+Red wire should be connected to pin 4 (+vin)
+White wire is can high
+black wire is can low.
+```
 SocketCAN setup
 ================================== 
 
