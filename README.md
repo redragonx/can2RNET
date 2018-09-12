@@ -30,9 +30,10 @@ R-Net Wiring Pinout to CAN inferface
 1. Strip a R-Net wire in half.
 2. Connect the wire with this pinout:
 ```
-Red wire should be connected to pin 4 (+vin)
-White wire is can high
-black wire is can low.
+white is can high
+blue is can low
+black is gnd
+red is +vin
 ```
 SocketCAN setup
 ================================== 
