@@ -1,0 +1,102 @@
+ "000", "0.000000000","","","CAN","08","RTR: 0x00000000" seen at poweroff 
+ "000", "0.000000000","","","CAN","08","RTR: 0x00000002" seen at poweroff 
+ "000", "0.000000000","","","CAN","10","STD: 0x0000000c" used by JSM to check for canbus connection @ poweron.  If sent while JSM is on, then it will turn it off. (not sure if affects other modules too)
+ "000", "0.000000000","","","CAN","10","STD: 0x0000000e   08 90 1c 8a 00 00 00 00"  JSM-tx Starts: 0.0206 ,retransmits: .05. unique to each JSM. Serial number?  PM must see this to begin profile handshaking.  "Serial number" can be anything, even 0.
+ "000", "0.000000000","","","CAN","12","STD: 0x00000050   c0 00 ff 00" seen after JSM init
+ "000", "0.000000000","","","CAN","12","STD: 0x00000050   d0 00 ff 02" seen after JSM init
+ "000", "0.000000000","","","CAN","12","STD: 0x00000050   f0 00 ff 01" seen after JSM init
+
+ "000", "0.000000000","","","CAN","10","STD: 0x00000060   90 00 00 00" PM-tx DriveProfile joystick event stop
+ "000", "0.000000000","","","CAN","10","STD: 0x00000060   90 01 00 40" PM-tx LiftProfile  joystick event start
+ "000", "0.000000000","","","CAN","10","STD: 0x00000060   90 01 00 00" PM-tx LiftProfile  joystick event stop
+ "000", "0.000000000","","","CAN","10","STD: 0x000007b3" JSM-tx? or PM-tx? Starts: 0.0210, retransmits: .03  repeats until an RTR0x7b3.  Then followed by RTR 0x1FXXXXXX
+ "000", "0.000000000","","","CAN","10","RTR: 0x000007b3" PM-tx. Followed by RTR 0x7b3, RTR 0x1FXXXXXX
+dump from device:08901c8a
+ "000", "0.000000000","","","CAN","10","XTD: 0x0a040100   64 " PM-tx power level. can be 00,19,32,4b,64. 100=joystick attribution
+ "000", "0.000000000","","","CAN","08","XTD: 0x0c000006" PM-tx motor is decelerating
+ "000", "0.000000000","","","CAN","08","XTD: 0x0c000005" PM-tx motor has stopped
+ "517", "3.509671000","","","CAN","10","XTD: 0x0c000400   d5 d5"  lamp test - all on
+ "930", "6.396993000","","","CAN","10","XTD: 0x0c000400   15 10"  left+right lamp on (hazard)
+ "956", "6.567077000","","","CAN","10","XTD: 0x0c000400   15 15"  left+right lamp off (hazard)
+"1575","10.813134000","","","CAN","10","XTD: 0x0c000400   00 05"  ???
+"1624","11.153350000","","","CAN","10","XTD: 0x0c000400   00 00"  all lights off
+"1869","12.852123000","","","CAN","10","XTD: 0x0c000400   80 80"  flood lights on
+"3261","22.704025000","","","CAN","10","XTD: 0x0c000400   01 00"  left lamp
+"3285","22.874130000","","","CAN","10","XTD: 0x0c000400   01 01"  left lamp
+"4816","33.744546000","","","CAN","10","XTD: 0x0c000400   04 04"  right lamp on
+"4864","34.084716000","","","CAN","10","XTD: 0x0c000400   04 00"  right lamp off
+"7110","49.711452000","","","CAN","10","XTD: 0x0c000400   80 80"  flood lights on
+"7330","51.240226000","","","CAN","10","XTD: 0x0c000400   95 90"  flood lights on, left+right lamp (hazard) on
+"7354","51.410236000","","","CAN","10","XTD: 0x0c000400   95 95"  flood lights + left+right lamp (hazard) off
+ "000", "0.000000000","","","CAN","08","XTD: 0x0c040100   " JSM-rx horn on. 100=joystick that sent the horn request.  Ranges 100 to F00
+ "000", "0.000000000","","","CAN","08","XTD: 0x0c040101   " JSM-rx horn off
+ "000", "0.000000000","","","CAN","09","XTD: 0x0c140000   01" ?seen after jsm init. if sent induces error state whereby speed is limited to 10%(? src?) and power lvl chg has no effect. (disconnected ECU error state)
+ "000", "0.000000000","","","CAN","09","XTD: 0x0c140000   c0" ?seen after jsm init
+ "000", "0.000000000","","","CAN","10","XTD: 0x0c180102  00 03" Starts: 0.840,retransmits: never.  ?????
+ "000", "0.000000000","","","CAN","10","XTD: 0x0c180000  01 01" seen after: profile change to drive mode, then 0x061...,0x60... 
+ "000", "0.000000000","","","CAN","10","XTD: 0x0c180000  02 02" seen after: profile change to tilt  mode, then 0x061...,0x60... 
+ "000", "0.000000000","","","CAN","10","XTD: 0x0c180001  20 01 01" seen after 0x0c180000 profile=tilt,1 of 3
+ "000", "0.000000000","","","CAN","10","XTD: 0x0c180001  00 01 01" seen after 0x0c180000 profile=tilt,2 of 3
+ "000", "0.000000000","","","CAN","10","XTD: 0x0c180001  01 01 01" seen after 0x0c180000 profile=tilt,3 of 3
+ "000", "0.000000000","","","CAN","10","XTD: 0x14300000" Ll Hh" PM-tx - motor power instaneous
+ "000", "0.000000000","","","CAN","10","XTD: 0x181c0100   20 50 20 51 20 52 20 53" JSM-rx play tones.  Fmt: Dd Nn.  D=duration 00-7F, N=note value 00-9c only 12 notes per lower nibble
+ "000", "0.000000000","","","CAN","10","XTD: 0x1c0c0000   64 " PM-tx / JSM-rx.  Battery level. Range: 00-64 (%).  Starts: 0.464, retransmits: .0004 unless there are other contending messages in that family(not confirmed) in which case it slows down.  JSM displays it dutifully.
+ "000", "0.000000000","","","CAN","10","XTD: 0x1c240101" JSM-tx Seems to indicate that JSM power is on? Seen at powerup @ 0.4903
+ "000", "0.000000000","","","CAN","10","XTD: 0x1c240100" PM-rx? Power down JSM --- have not checked to see if it powers down ALL modules yet.
+ "000", "0.000000000","","","CAN","10","XTD: 0x1c300004   LL LL LL LL RR RR RR RR" PM-tx amp hour counter.  Data contains two 32-bit fields.  They tend to be the same.  Two battery banks?
+
+
+
+
+
+
+
+RTR: 0x1f00082f
+RTR: 0x1f10b100
+RTR: 0x1f201e0e
+RTR: 0x1f304648
+RTR: 0x1f40dd00
+RTR: 0x1f501200
+RTR: 0x1f607b00
+RTR: 0x1f704500   #note: joystick will respond to these even if sleeping if hit 4 times in a row with these + 0x7b3, some RTR, and a 0x004
+XTD: 0x1f010808" diff = +0x00000020 -0x00000007
+XTD: 0x1f11b190" diff = +0x00000090
+XTD: 0x1f211e1c" diff = +0x00000010 -0x00000002
+XTD: 0x1f31468a" diff = +0x00000040
+XTD: 0x1f41dd00" *
+XTD: 0x1f511200" *
+XTD: 0x1f617b00" *
+XTD: 0x1f714500" *
+0x1fXXXXX does not change with different persistant setting like mode or power level
+
+
+     
+
+
+		    if ID=='28100100':
+                        fprint("SETSPEED\t" + str(int(DAT[0:2],16))+"%")
+                    elif ID=='70900101': fprint(".05HZ")
+                    elif ID=='30500000': fprint("1HZ\tDAT:"+DAT)
+                    elif ID=='0f030f0f': fprint("10HZ\tDAT:"+DAT)
+                    elif ID=='00e10112': fprint("20HZ\tDAT:"+DAT)
+                    #elif ID=='00e10112': fprint("\t"+outbinarystring)
+                    elif ID=='30600000': fprint("MODEinterlinkA\tDAT:"+DAT)
+                    elif ID=='30600001': fprint("MODEinterlinkB\tDAT:"+DAT)
+                    elif ID=='30600102': fprint("MODEinterlinkC\tDAT:"+DAT)
+                    elif ID=='06108008' and r1r0=='00': fprint("LIFTMODE\tREQUEST")
+                    elif ID=='06108008' and r1r0=='01': fprint("LIFTMODE\tREPLY")
+                    elif ID=='06108808' and r1r0=='00': fprint("DRIVEMODE\tREQUEST")
+                    elif ID=='06108808' and r1r0=='01': fprint("DRIVEMODE\tREPLY")
+                    elif ID=='70c00004':
+                        fprint('BATTERYLVL?\ta=' + \
+                        str(getLittleEndian32(DAT[0:8])) + \
+                        '\tb='+str(getLittleEndian32(DAT[8:16])))
+                    
+                    elif ID=='60700100':
+                        fprint("REFRESH-UI\tDAT:"+DAT)
+                    elif ID=='70300000':
+                        fprint("1HZ [46->5A]\tDAT:"+DAT)
+                    elif ID=='06009200':
+                        fprint(".2HZ ?MODE?\tr0:"+r1r0[1])
+                    
+
