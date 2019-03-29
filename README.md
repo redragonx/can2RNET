@@ -8,7 +8,12 @@ Projects that use this
 - [Smart Wheels](https://github.com/ysshah/SmartWheels)
    - https://youtu.be/6C0-vXI56D4
    - https://www.youtube.com/watch?v=VejDcxrd6uk (Old video)
-
+- Remote Control Demos
+   - https://www.youtube.com/watch?v=wW4jzoRx98A
+   - https://www.youtube.com/watch?v=jDMYnpxqKHw
+- Kaspersky SAS 2017 Demo
+   - https://www.youtube.com/watch?v=kJR1fNI8iNQ
+   
 Raspberry PI setup
 =====================
 
