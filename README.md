@@ -3,6 +3,12 @@ PGDT R-Net CAN library for power-wheelchairs with R-Net electronics
 
 By Stephen Chavez & Specter
 
+Discord server (2021 update)
+===============
+I don't know what happened, but can2RNET has gotten a lot of attention lately. It's a good thing. However, various people forked my project and done different things over the years. Nobody has really wanted to contribute publicly. So, to help with that. I started a Discord Server. Please join it.
+
+https://discord.gg/mYqJSS5
+
 Projects that use this
 ======================
 - [Smart Wheels](https://github.com/ysshah/SmartWheels)
