@@ -1,0 +1,11 @@
+Control layout for my particular controller (may vary for others).
+
+Layout with LED on (center bottom button to toggle):
+axes 0/1: left stick
+axes 2/3: right stick
+axes 4/5: DPAD
+btn 0-3: left/up/down/right
+btn 4-5: left trigger top/bottom
+btn 6-7: right trigger top/bottom
+btn 8-9: center button left/right
+btn 10-11: press left/right stick
