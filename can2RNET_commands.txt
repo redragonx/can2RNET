@@ -1,0 +1,9 @@
+Set up CAN interface:
+sudo ip link set can0 type can bitrate 125000
+sudo ip link set can0 up
+
+Connect to Pi (remote desktop):
+rdesktop 192.168.2.186 -g 1600x900
+
+List all IPs in network:
+for ip in 192.168.2.{1..254}; do ping -c1 ${ip} done ; wait
