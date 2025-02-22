@@ -89,3 +89,10 @@ $ candump -n 1 can0,7b3:7ff     #wait for can id 7B3
 Or run `python3 JoyLocal.py` to control a R-Net based PWC using any usb gamepad connected to the pi3.
 
 Python 3 is required.
+
+Using different hardware
+=========================================
+CAN is a widely used communication protocol, so there are many different controllers available you could use instead of the Raspberry Pi setup described above. However, there are a few important points to consider:
+- R-Net apparently uses low-speed fault-tolerant CAN as defined in ISO 11898-3, which means that it is able to continue normal operation even if one of the two data lines is disconnected. However, this is incompatible with high-speed CAN as defined in ISO 11898-2, so make sure to use a CAN transceiver that supports the fault-tolerant physical layer, otherwise no communication will be possible. Typical fault-tolerant CAN transceivers are the MCP2551 (which is used on the PiCAN2) and the TJA1055. A NXP A1050/C also works.
+- Make sure that there is no termination resistor active on the board you are using (you can usually disconnect these using a jumper).
+- The wheelchair is powered by its own batteries, which are a large, floating power supply. It is usually not earth-grounded. Keep this in mind when somehow connecting the wheelchair to the power grid (for example via a USB cable to a desktop computer), as there may be large voltage differences resulting in short current spikes the moment you make the connection. Use proper isolation for all connections (including power and ground) to avoid damaging your hardware.
