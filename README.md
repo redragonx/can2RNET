@@ -3,6 +3,31 @@ PGDT R-Net CAN library for power-wheelchairs with R-Net electronics
 
 By Stephen Chavez & Specter
 
+---
+
+## [Open R-Net](https://github.com/redragonx/open-rnet) — The Full Research is Now Public (2026)
+
+**10 years of R-Net reverse engineering, fully open sourced.**
+
+After a decade of research since our DEFCON 24 talk, we've released everything we know about the R-Net protocol in a new repository: **[open-rnet](https://github.com/redragonx/open-rnet)**
+
+What's in it:
+- **Complete R-Net protocol specification** — every frame, every handshake, fully documented
+- **590+ CAN frames mapped** with a searchable frame dictionary
+- **Serial authentication algorithm cracked** — XOR-based challenge/response, fully reversed
+- **R-Net Programmer dongle protocol reversed** — read/write device config memory without a $1,500 dongle
+- **Firmware dumps and analysis** — HCS08 microcontroller code, encryption keys, memory maps
+- **25 real-world .R-net config files** parsed from 10 different chairs (V6, C500, M300, Alltrack, Pulse 6, F3, M3)
+- **Python tools** — self-programming, OBP mode, config parser, protocol utilities
+- **27+ packet captures** for your own analysis
+- **3 confirmed control methods** — FollowJSM, JSMerror, EmulateJSM
+
+No more locked-out configs. No more begging a dealer to change your own wheelchair's speed setting.
+
+**[github.com/redragonx/open-rnet](https://github.com/redragonx/open-rnet)**
+
+---
+
 Discord server (2021 update)
 ===============
 I don't know what happened, but can2RNET has gotten a lot of attention lately. It's a good thing. However, various people forked my project and done different things over the years. Nobody has really wanted to contribute publicly. So, to help with that. I started a Discord Server. Please join it.
