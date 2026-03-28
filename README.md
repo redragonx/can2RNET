@@ -16,7 +16,7 @@ What's in it:
 - **590+ CAN frames mapped** with a searchable frame dictionary
 - **Serial authentication algorithm cracked** — XOR-based challenge/response, fully reversed
 - **R-Net Programmer dongle protocol reversed** — read/write device config memory without a $1,500 dongle
-- **Firmware dumps and analysis** — HCS08 microcontroller code, encryption keys, memory maps
+- **Firmware analysis** — HCS08 microcontroller reverse engineering, encryption keys, memory maps
 - **25 real-world .R-net config files** parsed from 10 different chairs (V6, C500, M300, Alltrack, Pulse 6, F3, M3)
 - **Python tools** — self-programming, OBP mode, config parser, protocol utilities
 - **27+ packet captures** for your own analysis
