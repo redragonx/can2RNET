@@ -45,8 +45,8 @@ stdbuf -o0 candump -tz can0 |stdbuf -o0 sed -E 's/can0//g;s/ \(/\(/g;s/\)    /\)
 /0C000.02/{s/ -* / Right_indicat /g};
 /0C000.03/{s/ -* / Hazards_indic /g};
 /0C000.04/{s/ -* / Lights_toggle /g};
-/0C040100/{s/ -* / Horn_on______ /g};
-/0C040101/{s/ -* / Horn_off_____ /g};
+/0C040.00/{s/ -* / Horn_on______ /g};
+/0C040.01/{s/ -* / Horn_off_____ /g};
 /_____065.* 90/{s/ -* / Seat_mve_inf2 /g};
 
 '
